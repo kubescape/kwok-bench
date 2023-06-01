@@ -67,7 +67,7 @@ for kind in kinds:
     with open(filepath) as f:
         template = Template(f.read())
     amount_of_resources = (
-        getattr(args, "all") if getattr(args, "all") > 0 else getattr(args, kind)
+        getattr(args, "all") if getattr(args, "all") > 0 and  getattr(args, kind) == 0 else getattr(args, kind)
     )
     for i in range(1, amount_of_resources + 1):
         subprocess.run(
