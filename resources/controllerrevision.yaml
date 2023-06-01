@@ -1,0 +1,7 @@
+apiVersion: apps/v1
+kind: ControllerRevision
+metadata:
+  name: example-revision-$id
+data:
+  name: revision-$id
+revision: 1

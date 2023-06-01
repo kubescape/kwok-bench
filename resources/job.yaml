@@ -1,0 +1,11 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: example-job-$id
+spec:
+  template:
+    spec:
+      containers:
+      - name: example-job-$id
+        image: example:1.0
+      restartPolicy: OnFailure

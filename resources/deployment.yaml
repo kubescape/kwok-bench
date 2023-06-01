@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-deployment-$id
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: example-deploy-$id
+  template:
+    metadata:
+      labels:
+        app: example-deploy-$id
+    spec:
+      containers:
+      - name: example-deploy-$id
+        image: example-deploy:1.0

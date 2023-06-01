@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: example-rs-$id
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: example-rs-$id
+  template:
+    metadata:
+      labels:
+        app: example-rs-$id
+    spec:
+      containers:
+      - name: example-rs-$id
+        image: example-rs:1.0

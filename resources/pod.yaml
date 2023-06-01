@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: naked-pod-$id
+spec:
+  containers:
+  - name: example-container
+    image: example:1.0

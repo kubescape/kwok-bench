@@ -1,0 +1,9 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: fake-pdb-$id
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: example

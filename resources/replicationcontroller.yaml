@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: fake-rc-$id
+spec:
+  replicas: 3
+  selector:
+    app: example
+  template:
+    metadata:
+      labels:
+        app: example
+    spec:
+      containers:
+      - name: example
+        image: example:1.0

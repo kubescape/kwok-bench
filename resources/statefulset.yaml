@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: example-ss-$id
+spec:
+  serviceName: example-ss-$id
+  replicas: 3
+  selector:
+    matchLabels:
+      app: example-ss-$id
+  template:
+    metadata:
+      labels:
+        app: example-ss-$id
+    spec:
+      containers:
+      - name: example-ss-$id
+        image: example:1.0

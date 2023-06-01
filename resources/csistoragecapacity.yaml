@@ -1,0 +1,12 @@
+apiVersion: storage.k8s.io/v1beta1
+kind: CSIStorageCapacity
+metadata:
+  name: fake-capacity-$id
+capacity: 100Gi
+maximumVolumeSize: 10Gi
+storageClassName: example
+nodeTopology:
+  matchLabelExpressions:
+  - key: topology.example.com/zone
+    values:
+    - zone1
