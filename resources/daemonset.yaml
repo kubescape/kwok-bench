@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: fake-pod-$id
-  namespace: default
+  # namespace: default
 spec:
   selector:
     matchLabels:
