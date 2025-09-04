@@ -26,7 +26,7 @@ This repository aims to help developers set up a large-scale, simulated Kubernet
     Create a new cluster named "demo" with the following command:
 
     ```sh
-    kwokctl create cluster --name demo
+    kwokctl create cluster --name demo --config kwok.yaml
     ```
 
     Confirm that the cluster has been created successfully by running:

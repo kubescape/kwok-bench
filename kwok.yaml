@@ -1,0 +1,7 @@
+apiVersion: config.kwok.x-k8s.io/v1alpha1
+kind: KwokConfiguration
+options:
+  nodesOnClusterSyncParallelism: 50
+  podsOnNodeSyncParallelism: 100
+  serverParallelism: 20
+  resourceSyncWorkers: 30
