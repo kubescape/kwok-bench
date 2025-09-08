@@ -21,12 +21,90 @@ spec:
                     operator: In
                     values:
                       - kwok
-      # A taint was added to an automatically created Node.
-      # You can remove taints of Node or add this toleration.
       tolerations:
         - key: "kwok.x-k8s.io/node"
           operator: "Exists"
           effect: "NoSchedule"
+      volumes:
+        - name: config-volume
+          emptyDir: {}
+        - name: secret-volume
+          emptyDir: {}
+        - name: emptydir-volume
+          emptyDir: {}
+        - name: shared-data
+          emptyDir: {}
+        - name: cache-volume
+          emptyDir: {}
+        - name: logs-volume
+          emptyDir: {}
+        - name: tmp-volume
+          emptyDir: {}
+        - name: data-volume
+          emptyDir: {}
+        - name: scripts-volume
+          emptyDir: {}
+        - name: certs-volume
+          emptyDir: {}
+      initContainers:
+        - name: init-config
+          image: busybox
+          command: ["sh", "-c", "cp /config/* /data/"]
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config
+            - name: shared-data
+              mountPath: /data
+        - name: init-secret
+          image: busybox
+          command: ["sh", "-c", "cp /secret/* /data/"]
+          volumeMounts:
+            - name: secret-volume
+              mountPath: /secret
+            - name: shared-data
+              mountPath: /data
+        - name: init-emptydir
+          image: busybox
+          command: ["sh", "-c", "echo 'init' > /init/flag"]
+          volumeMounts:
+            - name: emptydir-volume
+              mountPath: /init
+        - name: init-cache
+          image: busybox
+          command: ["sh", "-c", "mkdir -p /cache/init"]
+          volumeMounts:
+            - name: cache-volume
+              mountPath: /cache
+        - name: init-logs
+          image: busybox
+          command: ["sh", "-c", "touch /logs/init.log"]
+          volumeMounts:
+            - name: logs-volume
+              mountPath: /logs
+        - name: init-tmp
+          image: busybox
+          command: ["sh", "-c", "echo 'tmp' > /tmp/init"]
+          volumeMounts:
+            - name: tmp-volume
+              mountPath: /tmp
+        - name: init-data
+          image: busybox
+          command: ["sh", "-c", "echo 'data' > /data/init"]
+          volumeMounts:
+            - name: data-volume
+              mountPath: /data
+        - name: init-scripts
+          image: busybox
+          command: ["sh", "-c", "chmod +x /scripts/*"]
+          volumeMounts:
+            - name: scripts-volume
+              mountPath: /scripts
+        - name: init-certs
+          image: busybox
+          command: ["sh", "-c", "ls /certs"]
+          volumeMounts:
+            - name: certs-volume
+              mountPath: /certs
       containers:
       - name: example-deploy-$id
         image: example-deploy:1.0
@@ -37,3 +115,107 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
+        env:
+          - name: ENVIRONMENT
+            value: "production"
+          - name: LOG_LEVEL
+            value: "debug"
+          - name: CONFIG_PATH
+            value: "/etc/config"
+          - name: SECRET_PATH
+            value: "/etc/secret"
+          - name: SHARED_DATA_PATH
+            value: "/data"
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: CUSTOM_VAR
+            value: "custom-value"
+          - name: CACHE_PATH
+            value: "/cache"
+          - name: LOGS_PATH
+            value: "/logs"
+          - name: TMP_PATH
+            value: "/tmp"
+          - name: DATA_PATH
+            value: "/mnt/data"
+          - name: SCRIPTS_PATH
+            value: "/scripts"
+          - name: CERTS_PATH
+            value: "/certs"
+          - name: DB_HOST
+            value: "db.example.com"
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_USER
+            value: "admin"
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: password
+          - name: FEATURE_FLAG_X
+            value: "true"
+          - name: FEATURE_FLAG_Y
+            value: "false"
+          - name: API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: api-key-secret
+                key: key
+          - name: SERVICE_URL
+            value: "https://service.example.com"
+          - name: TIMEZONE
+            value: "UTC"
+          - name: LANG
+            value: "en_US"
+          - name: MAX_CONNECTIONS
+            value: "100"
+          - name: RETRY_COUNT
+            value: "5"
+          - name: RETRY_DELAY
+            value: "10"
+          - name: ENABLE_METRICS
+            value: "true"
+          - name: ENABLE_LOGGING
+            value: "true"
+          - name: LOG_FORMAT
+            value: "json"
+          - name: LOG_OUTPUT
+            value: "stdout"
+          - name: APP_VERSION
+            value: "1.0.0"
+          - name: BUILD_NUMBER
+            value: "42"
+          - name: DEPLOYMENT_ID
+            value: "$id"
+        volumeMounts:
+          - name: config-volume
+            mountPath: /etc/config
+          - name: secret-volume
+            mountPath: /etc/secret
+          - name: emptydir-volume
+            mountPath: /tmp/init
+          - name: shared-data
+            mountPath: /data
+          - name: cache-volume
+            mountPath: /cache
+          - name: logs-volume
+            mountPath: /logs
+          - name: tmp-volume
+            mountPath: /tmp
+          - name: data-volume
+            mountPath: /mnt/data
+          - name: scripts-volume
+            mountPath: /scripts
+          - name: certs-volume
+            mountPath: /certs
